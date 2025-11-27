@@ -2,27 +2,34 @@ from flask import Flask
 
 app = Flask(__name__)
 
-def generate_html(message):
-    html = """
-        <html>
-        <body>
-            <div style='text-align:center;font-size:80px;'>
-                <image height="540" width="1200" src="https://i0.wp.com/build5nines.com/wp-content/uploads/2023/02/GitHub_Actions_Featured_Image.jpg">
-                <br>
-                {0}<br>
-            </div>
-        </body>
-        </html>""".format(message)
-    return html
 
-def greet():
-    greeting = 'Welcome to CI/CD 101 using GitHub Actions!'
-    return greeting
+def greet() -> str:
+    """Return greeting message for the CI/CD lab."""
+    return "Welcome to CI/CD 101 using GitHub Actions!"
 
-@app.route('/greeting')
-def hello_world():
-    html = generate_html(greet())
-    return html
 
-if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=4049)
+def generate_html(message: str) -> str:
+    """Generate a simple HTML page for the given message."""
+    return """
+    <!doctype html>
+    <html lang="en">
+      <head>
+        <meta charset="utf-8">
+        <title>Greeting</title>
+      </head>
+      <body>
+        <h1>{}</h1>
+      </body>
+    </html>
+    """.format(message)
+
+
+@app.route("/greeting")
+def greeting() -> str:
+    """Flask view that returns the greeting HTML."""
+    message = greet()
+    return generate_html(message)
+
+
+if __name__ == "__main__":
+    app.run(port=4049)
